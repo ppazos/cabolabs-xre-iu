@@ -1,0 +1,70 @@
+﻿<!-- regla con acciones que devuelven valores -->
+<!-- XML Rule xrl -->
+<xrl:unit xmlns:xrl="http://openehr.org.es/rules">
+  <header>
+    <id>rule5.v1</id><!-- incluye version -->
+	<name>prueba 5 con variable collection</name>
+	<description />
+	<kewords />
+	<author />
+	<contributors />
+	<changeLog>
+	  <createdOn />
+      <lastModification />
+	  <change date=""><!-- interesa quien hizo cada cambio o quien es el responsable -->
+	    <added a="b" />
+		<removed c="d" />
+	  </change>
+	</changeLog>
+  </header>
+  <rules>
+    <rule>
+	  <id>rule_5_1.v1</id>
+	  <name>Regla con return de valores</name>
+	  <description />
+	  <keywords />
+	  <events>
+	    <!-- ante que eventos se debe ejecutar esta regla -->
+	  </events>
+	  <definitions>
+	    <var name="allergies" type="collection">
+	      <!-- si no tiene valor debe tener un resolvedor asociado -->
+	      <resolutor type="http"><!-- TODO: enum de types: soap, tcp, db, file(txt, csv, xls) -->
+	        <locator url="http://localhost:8089/custom_doc.xml" />
+	        <extractor path="alergias.alergia.codigo" />
+	        <!--
+	        <aggregator type="" />< ! - - el tipo del resultado de la agregacion es el tipo de la variable que se esta resolviendo - - > 
+	        -->
+	        <param name="patient_id" /><!-- usa esta variable declarada en el input como param del request -->
+	      </resolutor>
+	    </var>
+	    <!-- Estos valores podrian ser resueltos tambien con algun servicio asi quien los recibe
+	         no depende de la regla sino de algun estandar para estos valores -->
+	    <var name="ret_warning" value="warning" type="string" />
+	    <var name="ret_ok" value="ok" type="string" />
+	  </definitions>
+	  <input>
+	    <param name="patient_id" type="string" />
+       <param name="medication_drug" type="string" />
+     </input>
+	  <logic>
+	    <if>
+		  <!-- true / -->
+		  
+		  <contains value="medication_drug" in="allergies" /><!-- true si la coleccion allergies contiene el valor -->
+		  <do>
+		    <action type="print" inc1="CUIDADO, PROBLEMA CON DROGA"></action>
+		    <return name="ret_warning" />
+		    <return name="medication_drug" />
+		  </do>
+		</if>
+		<else><!-- cuando else contiene if, es lo mismo que logic -->
+		  <do>
+            <action type="print" inc1="NO PASA NADA" />
+            <return name="ret_ok" />
+          </do>
+		</else>
+	  </logic>
+	</rule>
+  </rules>
+</xrl:unit>

@@ -1,0 +1,77 @@
+﻿<!-- regla con acciones que devuelven valores -->
+<!-- XML Rule xrl -->
+<xrl:unit xmlns:xrl="http://openehr.org.es/rules">
+  <header>
+    <id>mod.rule6.v1</id><!-- incluye version -->
+	<name>prueba 6 con agregacion de numeros</name>
+	<description />
+	<kewords />
+	<author />
+	<contributors />
+	<changeLog>
+	  <createdOn />
+      <lastModification />
+	  <change date=""><!-- interesa quien hizo cada cambio o quien es el responsable -->
+	    <added a="b" />
+		<removed c="d" />
+	  </change>
+	</changeLog>
+  </header>
+  <rules>
+    <rule>
+	  <id>rule_6_1.v1</id>
+	  <name>Regla con return de agregaciones</name>
+	  <description />
+	  <keywords />
+	  <events>
+	    <!-- ante que eventos se debe ejecutar esta regla -->
+	  </events>
+	  <definitions>
+	    <var name="numero_sum" type="float">
+	      <!-- si no tiene valor debe tener un resolvedor asociado -->
+	      <resolutor type="http"><!-- TODO: enum de types: soap, tcp, db, file(txt, csv, xls) -->
+	        <locator url="http://localhost/number_aggregation.xml" />
+	        <extractor path="number" />
+	        <aggregator type="sum" /><!-- el tipo del resultado de la agregacion es el tipo de la variable que se esta resolviendo --> 
+            <!-- param ... -->
+	      </resolutor>
+	    </var>
+	    <var name="numero_avg" type="float">
+          <!-- si no tiene valor debe tener un resolvedor asociado -->
+          <resolutor type="http"><!-- TODO: enum de types: soap, tcp, db, file(txt, csv, xls) -->
+            <locator url="http://localhost/number_aggregation.xml" />
+            <extractor path="number" />
+            <aggregator type="avg" /><!-- el tipo del resultado de la agregacion es el tipo de la variable que se esta resolviendo --> 
+            <!-- param ... -->
+          </resolutor>
+        </var>
+	  </definitions>
+	  <input>
+	    <param name="command" type="string" />
+      </input>
+	  <logic>
+	    <if>
+		  <eq in1="command" inc2="sum" />
+		  <do>
+		    <action type="print" inc1="ES UNA SUMA"></action>
+		    <return name="numero_sum" />
+		  </do>
+		</if>
+		<else>
+		  <if>
+	        <eq in1="command" inc2="avg" />
+	        <do>
+	          <action type="print" inc1="ES PROMEDIO"></action>
+	          <return name="numero_avg" />
+	        </do>
+	      </if>
+	      <else>
+	        <do>
+	          <action type="print" inc1="COMANDO DESCONOCIDO"></action>
+	        </do>
+	      </else>
+		</else>
+	  </logic>
+	</rule>
+  </rules>
+</xrl:unit>

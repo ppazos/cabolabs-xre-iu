@@ -1,0 +1,120 @@
+<rules.Rule>
+  <id>rule_6_1.v1</id>
+  <name>Regla con return de agregaciones</name>
+  <description>[]</description>
+  <keywords>[]</keywords>
+  <errors/>
+  <definitions class="linked-hash-map">
+    <entry>
+      <string>numero_sum</string>
+      <values.Variable>
+        <name>numero_sum</name>
+        <value class="float">500.0</value>
+        <type>REAL</type>
+      </values.Variable>
+    </entry>
+    <entry>
+      <string>numero_avg</string>
+      <values.Variable>
+        <name>numero_avg</name>
+        <value class="float">166.66667</value>
+        <type>REAL</type>
+      </values.Variable>
+    </entry>
+  </definitions>
+  <resolutors class="linked-hash-map">
+    <entry>
+      <string>numero_sum</string>
+      <values.resolution.HttpResolution>
+        <locator>http://localhost:8089/number_aggregation.xml</locator>
+        <params/>
+        <extractor>number</extractor>
+        <aggregator>sum</aggregator>
+      </values.resolution.HttpResolution>
+    </entry>
+    <entry>
+      <string>numero_avg</string>
+      <values.resolution.HttpResolution>
+        <locator>http://localhost:8089/number_aggregation.xml</locator>
+        <params/>
+        <extractor>number</extractor>
+        <aggregator>avg</aggregator>
+      </values.resolution.HttpResolution>
+    </entry>
+  </resolutors>
+  <input class="linked-hash-map">
+    <entry>
+      <string>command</string>
+      <values.Variable>
+        <name>command</name>
+        <type>STRING</type>
+      </values.Variable>
+    </entry>
+  </input>
+  <logic class="logic.IfElse">
+    <ifCond class="conditions.operators.EqualsNode">
+      <v1 reference="../../../input/entry/values.Variable"/>
+      <v2>
+        <value class="string">sum</value>
+        <type>STRING</type>
+      </v2>
+    </ifCond>
+    <ifBlock>
+      <actions>
+        <logic.actions.Print>
+          <value>
+            <value class="string">ES UNA SUMA</value>
+            <type>STRING</type>
+          </value>
+        </logic.actions.Print>
+      </actions>
+      <returnValues class="linked-hash-map">
+        <entry>
+          <string>numero_sum</string>
+          <list/>
+        </entry>
+      </returnValues>
+    </ifBlock>
+    <elseBlock class="logic.IfElse">
+      <ifCond class="conditions.operators.EqualsNode">
+        <v1 reference="../../../../input/entry/values.Variable"/>
+        <v2>
+          <value class="string">avg</value>
+          <type>STRING</type>
+        </v2>
+      </ifCond>
+      <ifBlock>
+        <actions>
+          <logic.actions.Print>
+            <value>
+              <value class="string">ES PROMEDIO</value>
+              <type>STRING</type>
+            </value>
+          </logic.actions.Print>
+        </actions>
+        <returnValues class="linked-hash-map">
+          <entry>
+            <string>numero_avg</string>
+            <list/>
+          </entry>
+        </returnValues>
+      </ifBlock>
+      <elseBlock class="logic.ActionBlock">
+        <actions>
+          <logic.actions.Print>
+            <value>
+              <value class="string">COMANDO DESCONOCIDO</value>
+              <type>STRING</type>
+            </value>
+          </logic.actions.Print>
+        </actions>
+        <returnValues class="linked-hash-map"/>
+      </elseBlock>
+    </elseBlock>
+  </logic>
+  <context>
+    <values class="linked-hash-map"/>
+    <executionSessionId>f6e177aa-68bb-4d7c-9a09-66aa56075406</executionSessionId>
+  </context>
+  <_-lock class="object-array"/>
+</rules.Rule>

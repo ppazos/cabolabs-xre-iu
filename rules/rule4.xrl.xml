@@ -1,0 +1,93 @@
+﻿<!-- regla con acciones que devuelven valores -->
+<!-- XML Rule xrl -->
+<xrl:unit xmlns:xrl="http://openehr.org.es/2012/rulens">
+  <header>
+    <id>rule4.v1</id><!-- incluye version -->
+	<name>prueba 4 con return de valores</name>
+	<description />
+	<kewords />
+	<author />
+	<contributors />
+	<changeLog>
+	  <createdOn />
+      <lastModification />
+	  <change date=""><!-- interesa quien hizo cada cambio o quien es el responsable -->
+	    <added a="b" />
+		<removed c="d" />
+	  </change>
+	</changeLog>
+  </header>
+  <rules>
+    <rule>
+	  <id>rule_4_1.v1</id>
+	  <name>Regla con return de valores</name>
+	  <description />
+	  <keywords />
+	  <events>
+	    <!-- ante que eventos se debe ejecutar esta regla -->
+	  </events>
+	  <definitions>
+	  	<!-- Servicio que da un valor random <random>valor</random>  extractor="random" --> 
+	  	<!--<var name="var_rnd" locator="http://localhost/YuppPHPFramework/services/xml/random" type="integer" />-->
+	    <var name="var_rnd" type="integer">
+	      <!-- si no tiene valor debe tener un resolvedor asociado -->
+	      <resolutor type="http"><!-- TODO: enum de types: soap, tcp, db, file(txt, csv, xls) -->
+	        <locator url="http://localhost/random.xml" />
+	        <!--
+	        <extractor path="" />
+	        <aggregator type="" />< ! - - el tipo del resultado de la agregacion es el tipo de la variable que se esta resolviendo - - > 
+	        -->
+	        <!-- REGLA: los params declarados en la resolucion de
+	                    variables se guardan aparte de los parámetros
+	                    de entrada, no importa que tengan el mismo nombre
+	                    (en este caso par1 también es input).
+	                    
+	             FIXME: hay que ver el caso de 2 resoluciones que tengan el mismo nombre pero distintos valores
+	             http://code.google.com/p/xre-ui/issues/detail?id=6
+	                    -->
+	        <param name="par1" />
+	      </resolutor>
+	    </var>
+	  </definitions>
+	  <input>
+	    <param name="par1" type="integer" />
+        <param name="par2" type="float" />
+      </input>
+	  <logic>
+	    <if><!-- primer if -->
+		  <eq inc1="a" inc2="b" />
+		  <do>
+		    <action type="print" inc1="accion print pepe"></action>
+		  </do>
+		</if>
+		<else><!-- cuando else contiene if, es lo mismo que logic -->
+		  <if><!-- segundo if -->
+		    <gt in1="var_rnd" inc2="400" />
+		    <do>
+		      <action type="print" inc1="var_rnd es mayor que 400, es:" />
+		      <action type="print" in1="var_rnd" />
+		      
+		      <action type="sum" in1="par1" in2="par2" return="sum1" />
+		      <action type="print" inc1="suma par1 y par2" />
+		      <action type="print" in1="sum1" />
+		      
+		      <action type="sum" in1="par1" in2="var_rnd" return="sum1" />
+		      <action type="print" inc1="suma par1 y var_rnd" />
+		      <action type="print" in1="sum1" />
+
+			  <!-- esta regla devuelve un valor al finalizar, podria devolver varios en un map por nombre agregando varios return -->
+	          <return name="sum1" />
+	          <return name="par1" />
+			</do>
+		  </if>
+		  <else>
+			<do>
+	          <action type="print" inc1="var_rnd es menor o igual que 400, es:" />
+		      <action type="print" in1="var_rnd" />
+			</do>
+		  </else>
+		</else>
+	  </logic>
+	</rule>
+  </rules>
+</xrl:unit>
