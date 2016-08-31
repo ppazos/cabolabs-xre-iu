@@ -1,20 +1,28 @@
 dataSource {
     pooled = true
-    driverClassName = "org.h2.Driver"
-    username = "sa"
-    password = ""
+    driverClassName = 'com.mysql.jdbc.Driver'
+    dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+    username = "root"
+    password = "root"
 }
 hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = false
-    cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory'
+    cache.region.factory_class = 'org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory' // Hibernate 4
 }
 // environment specific settings
 environments {
     development {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            String host = "localhost"
+            String port = 3306
+            String dbName = "xre"
+           
+            url = "jdbc:mysql://$host:$port/$dbName" // ?useTimezone=true&serverTimezone=UTC
+           
+            username = 'root'
+            password = ''
         }
     }
     test {
